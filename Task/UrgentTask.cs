@@ -6,6 +6,6 @@
 
     public override string GetDetails()
     {
-        return base.GetDetails() + "URGENT";
+        return base.GetDetails() + " -URGENT-";
     }
 }

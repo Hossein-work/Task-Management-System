@@ -24,8 +24,9 @@
     {
         get => duedate; private set => duedate = value;
     }
+
     public virtual string GetDetails()
-    {
-        return "";
+    {     
+        return description;
     }
 }
