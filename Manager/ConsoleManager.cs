@@ -46,4 +46,13 @@ static class ConsoleManager
             Console.WriteLine($"{prop.Name} : {value}");
         }
     }
+
+    public static void SendNotification(NotificationService.NotifType type, string message)
+    {
+        Console.WriteLine(type.ToString() + ':' + message);
+        for (int i = 0; i < (message.Length + type.ToString().Length + 1); i++)
+            Console.Write('-');
+        Console.WriteLine();
+    }
+
 }
