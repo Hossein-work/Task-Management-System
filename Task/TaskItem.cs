@@ -14,18 +14,27 @@
 
     public string Title
     {
-        get => title; private set => title = value;
+        get => title;
+        private set
+        {
+            title = CheckString(value);
+        }
     }
     public string Description
     {
-        get => description; private set => description = value;
+        get => description;
+        private set
+        {
+            description = CheckString(value);
+        }
     }
     public DateTime DueDate
     {
         get => duedate; private set => duedate = value;
     }
     public Guid GetId() => Id;
-
+    private string CheckString(string enter) =>  string.IsNullOrEmpty(enter) ? 
+        throw new AggregateException("Cannot be null or without a value.") : enter ;
 
     public virtual string GetDetails()
     {
