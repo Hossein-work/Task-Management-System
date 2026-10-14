@@ -15,11 +15,13 @@ class InMemoryTaskRepository : IRepository<TaskItem>
         try
         {
             Tasks.Add(entity);
+            ConsoleManager.ShowSucces("The operation was successful!");
         }
         catch
         {
             ConsoleManager.ShowBug("The add operation was unsuccessful! \nPlease Try Again.");
         }
+
     }
 
     public void GetAll()
@@ -30,7 +32,7 @@ class InMemoryTaskRepository : IRepository<TaskItem>
         }
         catch
         {
-            ConsoleManager.ShowBug("The add operation was unsuccessful! \nPlease Try Again.");
+            ConsoleManager.ShowBug("The Get All operation was unsuccessful! \nPlease Try Again.");
         }
     }
 
@@ -39,13 +41,14 @@ class InMemoryTaskRepository : IRepository<TaskItem>
         try
         {
             TaskItem? instance = Tasks.Find(x => x.GetId() == Id);
-            if (instance == null)
+            if (instance != null)           
+                ConsoleManager.ShowInfo(instance);
+            else 
                 ConsoleManager.ShowBug("Task not founded !");
-            else ConsoleManager.ShowInfo(instance);
         }
         catch
         {
-            ConsoleManager.ShowBug("The add operation was unsuccessful! \nPlease Try Again.");
+            ConsoleManager.ShowBug("The Get By Id operation was unsuccessful! \nPlease Try Again.");
         }
     }
 
@@ -54,13 +57,19 @@ class InMemoryTaskRepository : IRepository<TaskItem>
         try
         {
             TaskItem? instance = Tasks.Find(x => x.GetId() == Id);
-            if (instance == null)
+            if (instance != null)
+                Tasks.Remove(instance);
+            else
+            {
                 ConsoleManager.ShowBug("Task not founded !");
-            else Tasks.Remove(instance);
+                return;
+            }
+
+            ConsoleManager.ShowSucces("The operation was successful!");
         }
         catch
         {
-            ConsoleManager.ShowBug("The add operation was unsuccessful! \nPlease Try Again.");
+            ConsoleManager.ShowBug("The remove operation was unsuccessful! \nPlease Try Again.");
         }
     }
 }

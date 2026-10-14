@@ -60,6 +60,11 @@ static class ConsoleManager
         Console.BackgroundColor = ConsoleColor.Red;
         Console.WriteLine(bug);
         Console.ResetColor();
-
+    }
+    public static void ShowSucces(string succes)
+    {
+        Console.BackgroundColor = ConsoleColor.Green;
+        Console.WriteLine("---" + succes + "---");
+        Console.ResetColor();
     }
 }
