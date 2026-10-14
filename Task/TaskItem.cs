@@ -33,11 +33,17 @@
         get => duedate; private set => duedate = value;
     }
     public Guid GetId() => Id;
-    private string CheckString(string enter) =>  string.IsNullOrEmpty(enter) ? 
-        throw new AggregateException("Cannot be null or without a value.") : enter ;
+    private string CheckString(string enter) => string.IsNullOrEmpty(enter) ?
+        throw new AggregateException("Cannot be null or without a value.") : enter;
 
     public virtual string GetDetails()
     {
         return description;
+    }
+    public void EditTask(TaskItem input)
+    {
+        title = input.title;
+        description = input.description;
+        duedate = input.duedate;
     }
 }

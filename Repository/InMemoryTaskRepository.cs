@@ -16,13 +16,32 @@ class InMemoryTaskRepository : IRepository<TaskItem>
         {
             Tasks.Add(entity);
             ConsoleManager.ShowSucces("The operation was successful!");
-            ConsoleManager.SendNotification(NotificationService.NotifType.Sms,"A new task was added.");
+            ConsoleManager.SendNotification(NotificationService.NotifType.Sms, "A new task was added.");
         }
         catch
         {
             ConsoleManager.ShowBug("The add operation was unsuccessful! \nPlease Try Again.");
         }
 
+    }
+
+    public void Edit(Guid Id,string title, string describtion)
+    {
+        try
+        {
+            TaskItem? item;
+            if (GetTask(Id, out item))
+            {
+                TaskItem instance = new(title, describtion,item.DueDate);
+                item.EditTask(instance);
+            }
+            else
+                ConsoleManager.ShowBug("Task not founded !");
+        }
+        catch
+        {
+            ConsoleManager.ShowBug("The Edit operation was unsuccessful! \nPlease Try Again.");
+        }
     }
 
     public void GetAll()
@@ -41,16 +60,23 @@ class InMemoryTaskRepository : IRepository<TaskItem>
     {
         try
         {
-            TaskItem? instance = Tasks.Find(x => x.GetId() == Id);
-            if (instance != null)           
-                ConsoleManager.ShowInfo(instance);
-            else 
+            TaskItem? item;
+            if (GetTask(Id, out item))
+                ConsoleManager.ShowInfo(item);
+            else
                 ConsoleManager.ShowBug("Task not founded !");
         }
         catch
         {
             ConsoleManager.ShowBug("The Get By Id operation was unsuccessful! \nPlease Try Again.");
         }
+    }
+
+    private bool GetTask(Guid Id, out TaskItem? input)
+    {
+        TaskItem? instance = Tasks.Find(x => x.GetId() == Id);
+        input = instance != null ? instance : null;
+        return instance != null;
     }
 
     public void RemoveById(Guid Id)
