@@ -24,9 +24,11 @@
     {
         get => duedate; private set => duedate = value;
     }
+    public Guid GetId() => Id;
+
 
     public virtual string GetDetails()
-    {     
+    {
         return description;
     }
 }

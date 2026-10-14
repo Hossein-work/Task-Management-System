@@ -1,14 +1,23 @@
 ﻿class InMemoryTaskRepository : IRepository<TaskItem>
 {
-    List<TaskItem> Tasks = new();
+    List<TaskItem> Tasks = new()
+    {
+        new TaskItem ("title1","des4",DateTime.Now),
+        new TaskItem ("title2","des3",DateTime.Now),
+        new TaskItem ("title3","des2",DateTime.Now),
+        new TaskItem ("title4","des1",DateTime.Now),
+    };
     public void GetAll()
     {
-        throw new NotImplementedException();
+        ConsoleManager.ShowGetAll(Tasks);
     }
 
     public void GetById(Guid Id)
     {
-        throw new NotImplementedException();
+        TaskItem? instance = Tasks.Find(x => x.GetId() == Id);
+        if (instance != null)   
+            ConsoleManager.ShowBug("Task not founded !");
+        else ConsoleManager.ShowInfo(instance);
     }
 
     public void RemoveById(Guid Id)
