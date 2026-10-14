@@ -2,7 +2,7 @@
 {
     public TaskItem(string title, string description, DateTime dueDate)
     {
-        Id = new Guid();
+        Id = Guid.NewGuid();
         Title = title;
         Description = description;
         DueDate = dueDate;

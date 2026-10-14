@@ -1,4 +1,6 @@
-﻿class InMemoryTaskRepository : IRepository<TaskItem>
+﻿using System.ComponentModel;
+
+class InMemoryTaskRepository : IRepository<TaskItem>
 {
     private readonly List<TaskItem> Tasks = new()
     {
@@ -22,19 +24,43 @@
 
     public void GetAll()
     {
-        ConsoleManager.ShowGetAll(Tasks);
+        try
+        {
+            ConsoleManager.ShowGetAll(Tasks);
+        }
+        catch
+        {
+            ConsoleManager.ShowBug("The add operation was unsuccessful! \nPlease Try Again.");
+        }
     }
 
     public void GetById(Guid Id)
     {
-        TaskItem? instance = Tasks.Find(x => x.GetId() == Id);
-        if (instance != null)
-            ConsoleManager.ShowBug("Task not founded !");
-        else ConsoleManager.ShowInfo(instance);
+        try
+        {
+            TaskItem? instance = Tasks.Find(x => x.GetId() == Id);
+            if (instance == null)
+                ConsoleManager.ShowBug("Task not founded !");
+            else ConsoleManager.ShowInfo(instance);
+        }
+        catch
+        {
+            ConsoleManager.ShowBug("The add operation was unsuccessful! \nPlease Try Again.");
+        }
     }
 
     public void RemoveById(Guid Id)
     {
-        throw new NotImplementedException();
+        try
+        {
+            TaskItem? instance = Tasks.Find(x => x.GetId() == Id);
+            if (instance == null)
+                ConsoleManager.ShowBug("Task not founded !");
+            else Tasks.Remove(instance);
+        }
+        catch
+        {
+            ConsoleManager.ShowBug("The add operation was unsuccessful! \nPlease Try Again.");
+        }
     }
 }
