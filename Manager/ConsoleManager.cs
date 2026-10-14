@@ -55,4 +55,11 @@ static class ConsoleManager
         Console.WriteLine();
     }
 
+    public static void ShowBug(string bug)
+    {
+        Console.BackgroundColor = ConsoleColor.Red;
+        Console.WriteLine(bug);
+        Console.ResetColor();
+
+    }
 }
