@@ -16,6 +16,7 @@ class InMemoryTaskRepository : IRepository<TaskItem>
         {
             Tasks.Add(entity);
             ConsoleManager.ShowSucces("The operation was successful!");
+            ConsoleManager.SendNotification(NotificationService.NotifType.Sms,"A new task was added.");
         }
         catch
         {
@@ -66,6 +67,8 @@ class InMemoryTaskRepository : IRepository<TaskItem>
             }
 
             ConsoleManager.ShowSucces("The operation was successful!");
+            ConsoleManager.SendNotification(NotificationService.NotifType.Sms, $"A task titled {instance.Title} was deleted.");
+
         }
         catch
         {
