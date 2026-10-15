@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel;
 
-class InMemoryTaskRepository : IRepository<TaskItem>
+class InMemoryTaskRepository : IRepository
 {
     private readonly List<TaskItem> Tasks = new()
     {
@@ -10,7 +10,7 @@ class InMemoryTaskRepository : IRepository<TaskItem>
         new TaskItem ("title4","des1",DateTime.Now),
     };
 
-    public void Add(TaskItem entity)
+    public void Add<T>(T entity) where T : TaskItem
     {
         try
         {
