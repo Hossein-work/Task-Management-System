@@ -82,19 +82,18 @@ class InMemoryTaskRepository : IRepository
     public void RemoveById(Guid Id)
     {
         try
-        {
-            TaskItem? instance = Tasks.Find(x => x.GetId() == Id);
-            if (instance != null)
+        {          
+            if (GetTask(Id,out TaskItem? instance))
+            {
                 Tasks.Remove(instance);
+
+                ConsoleManager.ShowSucces("The operation was successful!");
+                ConsoleManager.SendNotification(NotificationService.NotifType.Sms, $"A task titled {instance.Title} was deleted.");
+            }
             else
             {
                 ConsoleManager.ShowBug("Task not founded !");
-                return;
             }
-
-            ConsoleManager.ShowSucces("The operation was successful!");
-            ConsoleManager.SendNotification(NotificationService.NotifType.Sms, $"A task titled {instance.Title} was deleted.");
-
         }
         catch
         {
