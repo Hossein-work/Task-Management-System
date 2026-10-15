@@ -73,30 +73,42 @@ static class ConsoleManager
         Console.WriteLine("---" + succes + "---");
         Console.ResetColor();
     }
-    #region Add
-    public static void AddCM(out object? task)
+    private static string GetTitle()
     {
-        string? t;
-        string? d;
-        string? ty;
+        string? instance;
         do
         {
             Console.WriteLine("Please enter task title :");
-            t = Console.ReadLine();
-            if (CheckInputIsNotEmpty(t))
+            instance = Console.ReadLine();
+            if (CheckInputIsNotEmpty(instance))
                 break;
             else
                 ShowBug("Title cannot be empty.");
         } while (true);
+        return instance;
+    }
+    private static string GetDescription()
+    {
+        string? instance;
         do
         {
             Console.WriteLine("Please enter task descripton :");
-            d = Console.ReadLine();
-            if (CheckInputIsNotEmpty(d))
+            instance = Console.ReadLine();
+            if (CheckInputIsNotEmpty(instance))
                 break;
             else
                 ShowBug("Description cannot be empty!");
         } while (true);
+        return instance;
+    }
+    #region Add
+
+    public static void AddCM(out object? task)
+    {
+        string? t = GetTitle();
+        string? d = GetDescription();
+        string? ty;
+
         do
         {
             Console.WriteLine("Please enter task type :");
@@ -105,12 +117,33 @@ static class ConsoleManager
             if (CheckInputIsNotEmpty(ty))
                 if (ty.CheckInputIsINT(out byte ob))
                 {
-                    task = Activator.CreateInstance(types[ob], t, d,DateTime.Now);
+                    task = Activator.CreateInstance(types[ob], t, d, DateTime.Now);
                     break;
                 }
                 else Console.WriteLine("Please enter a valid value !");
             else ShowBug("Type cannot be empty!");
         } while (true);
+    }
+    public static void EditMC(out Guid id, out string title, out string description)
+    {
+        string? i;
+        do
+        {
+            Console.WriteLine("Please enter the ID (00000000-0000-0000-0000-000000000000) :");
+            i = Console.ReadLine();
+            if (CheckInputIsNotEmpty(i))
+                if (Guid.TryParse(i, out Guid result))
+                {
+                    id = result;
+                    break;
+                }
+                else Console.WriteLine("Please enter a valid value !");
+            else ShowBug("Id cannot be empty!");
+
+        } while (true);
+        Console.WriteLine("To edit a task:");
+        title = GetTitle();
+        description = GetDescription();
     }
     private enum TaskType
     {

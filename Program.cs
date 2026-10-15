@@ -30,6 +30,7 @@ class TaskManager
             case 2:
                 break;
             case 3:
+                EditManager(repository);
                 break;
             case 4:
                 AddManager(repository);
@@ -42,6 +43,11 @@ class TaskManager
 
         TaskItem? instance = task as TaskItem;
         instanceRepository.Add(instance);
+    }
+    private static void EditManager(InMemoryTaskRepository instanceRepository)
+    {
+        ConsoleManager.EditMC(out Guid id, out string title, out string description);
+        instanceRepository.Edit(id, title, description);
     }
 
 }
