@@ -2,6 +2,7 @@
 using System.Runtime.ConstrainedExecution;
 using System.Reflection;
 using System.Collections.Specialized;
+using System.Reflection.Metadata;
 
 static class ConsoleManager
 {
@@ -69,7 +70,7 @@ static class ConsoleManager
         Console.ResetColor();
     }
     #region Add
-    public static void AddCM(out string title, out string description, out string type)
+    public static void AddCM(out object? task)
     {
         string? t;
         string? d;
@@ -83,7 +84,6 @@ static class ConsoleManager
             else
                 ShowBug("Title cannot be empty.");
         } while (true);
-        title = t;
         do
         {
             Console.WriteLine("Please enter task descripton :");
@@ -93,7 +93,6 @@ static class ConsoleManager
             else
                 ShowBug("Description cannot be empty!");
         } while (true);
-        description = d;
         do
         {
             Console.WriteLine("Please enter task type :");
@@ -102,7 +101,7 @@ static class ConsoleManager
             if (CheckInputIsNotEmpty(ty))
                 if (ty.CheckInputIsINT(out byte ob))
                 {
-                    type = ob == 1 ? type = TaskType.Urgent.ToString() : type = TaskType.Normal.ToString();
+                    task = Activator.CreateInstance(types[ob], t, d,DateTime.Now);
                     break;
                 }
                 else Console.WriteLine("Please enter a valid value !");
@@ -114,12 +113,18 @@ static class ConsoleManager
         Urgent,
         Normal
     }
+    private static List<Type> types = new List<Type>()
+    {
+           typeof(TaskItem) ,
+          typeof(UrgentTask) ,
+    };
+
     private static void ShowType()
     {
         byte count = 1;
         foreach (TaskType value in Enum.GetValues(typeof(TaskType)))
         {
-            Console.Write(count+".");
+            Console.Write(count + ".");
             count++;
             Console.WriteLine(value);
         }

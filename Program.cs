@@ -36,12 +36,12 @@ class TaskManager
                 break;
         }
     }
-    private static void AddManager(InMemoryTaskRepository instance)
+    private static void AddManager(InMemoryTaskRepository instanceRepository)
     {
-        ConsoleManager.AddCM(out string title, out string description, out string type);   
-        TaskItem task = type == "Urgent" ? new UrgentTask(title, description,DateTime.Now) :
-            new TaskItem(title, description, DateTime.Now);
-        instance.Add(task);
+        ConsoleManager.AddCM(out object? task);
+
+        TaskItem? instance = task as TaskItem;
+        instanceRepository.Add(instance);
     }
 
 }
