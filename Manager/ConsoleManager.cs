@@ -44,9 +44,13 @@ static class ConsoleManager
 
         foreach (var prop in properties)
         {
-            var value = prop.GetValue(list);
-            Console.WriteLine($"{prop.Name} : {value}");
+            if (prop.Name != "Description")
+            {
+                var value = prop.GetValue(list);
+                Console.WriteLine($"{prop.Name} : {value}");
+            }
         }
+        Console.WriteLine($"Description : {list.GetDetails()}");
     }
 
     public static void SendNotification(NotificationService.NotifType type, string message)
