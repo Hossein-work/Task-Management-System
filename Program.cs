@@ -28,6 +28,7 @@ class TaskManager
                 repository.GetAll();
                 break;
             case 2:
+                RemoveManager(repository);
                 break;
             case 3:
                 EditManager(repository);
@@ -36,6 +37,11 @@ class TaskManager
                 AddManager(repository);
                 break;
         }
+    }
+    private static void RemoveManager(InMemoryTaskRepository instanceRepository)
+    {
+        Guid id = ConsoleManager.RemoveMC();
+        instanceRepository.RemoveById(id);
     }
     private static void AddManager(InMemoryTaskRepository instanceRepository)
     {

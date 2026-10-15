@@ -126,6 +126,15 @@ static class ConsoleManager
     }
     public static void EditMC(out Guid id, out string title, out string description)
     {
+        id = GetId();
+        
+        Console.WriteLine("To edit a task:");
+        title = GetTitle();
+        description = GetDescription();
+    }
+    public static Guid RemoveMC() => GetId();
+    private static Guid GetId()
+    {
         string? i;
         do
         {
@@ -134,16 +143,12 @@ static class ConsoleManager
             if (CheckInputIsNotEmpty(i))
                 if (Guid.TryParse(i, out Guid result))
                 {
-                    id = result;
-                    break;
+                    return result;
                 }
                 else Console.WriteLine("Please enter a valid value !");
             else ShowBug("Id cannot be empty!");
 
         } while (true);
-        Console.WriteLine("To edit a task:");
-        title = GetTitle();
-        description = GetDescription();
     }
     private enum TaskType
     {
