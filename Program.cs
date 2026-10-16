@@ -6,19 +6,21 @@ class TaskManager
 {
     private static readonly string Welcome = "Welcome to my project!";
     private static readonly List<string> Tools = new() { "Get all task", "Remove task", "Edit task", "Add task", "Exit" };
+    private static InMemoryTaskRepository repository = new InMemoryTaskRepository();
     public static void Main(string[] args)
     {
         ConsoleManager.Welcome(Welcome, '-', 20);
-        Console.WriteLine("Please select an item:");
-        ConsoleManager.ShowToolsList(Tools);
-        sbyte input = Convert.ToSByte(Console.ReadLine());
-        ToolsManager(input);
-
+        do
+        {
+            Console.WriteLine("Please select an item:");
+            ConsoleManager.ShowToolsList(Tools);
+            sbyte input = Convert.ToSByte(Console.ReadLine());
+            ToolsManager(input);
+        } while (ConsoleManager.CheckEndProgram("Are you continuing? (Yes or No)"));
 
     }
     private static void ToolsManager(sbyte n)
     {
-        InMemoryTaskRepository repository = new InMemoryTaskRepository();
 
         switch (n)
         {
@@ -37,6 +39,7 @@ class TaskManager
                 AddManager(repository);
                 break;
         }
+
     }
     private static void RemoveManager(InMemoryTaskRepository instanceRepository)
     {

@@ -17,6 +17,25 @@ static class ConsoleManager
             Console.Write(signType);
         Console.WriteLine();
     }
+    public static bool CheckEndProgram(string endMessage)
+    {
+        Console.WriteLine(endMessage);
+        string input = CheckYesOrNo();
+        return input.Equals("yes");
+    }
+    private static string CheckYesOrNo()
+    {
+        do
+        {
+            string? input = Console.ReadLine();
+            if (input.ToLower() == "yes" || input.ToLower() == "no")
+                return input;
+
+            else
+                ShowBug("Please Enter Yes Or No !");
+
+        } while (true);
+    }
     public static void ShowToolsList(List<string> list)
     {
         byte counter = 1;
@@ -127,7 +146,7 @@ static class ConsoleManager
     public static void EditMC(out Guid id, out string title, out string description)
     {
         id = GetId();
-        
+
         Console.WriteLine("To edit a task:");
         title = GetTitle();
         description = GetDescription();
