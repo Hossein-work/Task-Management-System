@@ -4,25 +4,24 @@ using System.Runtime.InteropServices;
 
 class TaskManager
 {
-    private static readonly string Welcome = "Welcome to my project!";
-    private static readonly List<string> Tools = new() { "Get all task", "Remove task", "Edit task", "Add task", "Exit" };
+    private const string EndMessage = "Are you continuing? (Yes or No)";
+    private const string Welcome = "Welcome to my project!";
+    private static readonly List<string> Tools = new() {"Exit","Get all task", "Remove task", "Edit task", "Add task" };
     private static InMemoryTaskRepository repository = new InMemoryTaskRepository();
     public static void Main(string[] args)
     {
         ConsoleManager.Welcome(Welcome, '-', 20);
         do
         {
-            Console.WriteLine("Please select an item:");
             ConsoleManager.ShowToolsList(Tools);
-            sbyte input = Convert.ToSByte(Console.ReadLine());
-            ToolsManager(input);
-        } while (ConsoleManager.CheckEndProgram("Are you continuing? (Yes or No)"));
+            ToolsManager();
+        } while (ConsoleManager.CheckEndProgram(EndMessage));
 
     }
-    private static void ToolsManager(sbyte n)
+    private static void ToolsManager()
     {
-
-        switch (n)
+        ConsoleManager.CheckInputForTools(Tools.Count -1,out byte output);
+        switch (output)
         {
             case 0:
                 break;

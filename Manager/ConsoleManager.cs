@@ -38,7 +38,8 @@ static class ConsoleManager
     }
     public static void ShowToolsList(List<string> list)
     {
-        byte counter = 1;
+        Console.WriteLine("Please select an item:");
+        byte counter = 0;
         foreach (var item in list)
         {
             Console.WriteLine($"{counter}. {item}");
@@ -135,7 +136,7 @@ static class ConsoleManager
             ShowType();
             ty = Console.ReadLine();
             if (CheckInputIsNotEmpty(ty))
-                if (ty.CheckInputIsINT(out byte ob))
+                if (ty.CheckInputIsINT(out byte ob, 0, types.Count))
                 {
                     task = Activator.CreateInstance(types[ob - 1], t, d, DateTime.Now);
                     break;
@@ -173,7 +174,7 @@ static class ConsoleManager
     private enum TaskType
     {
         Normal,
-        Urgent,    
+        Urgent,
     }
     private static List<Type> types = new List<Type>()
     {
@@ -192,13 +193,28 @@ static class ConsoleManager
         }
     }
     private static bool CheckInputIsNotEmpty(string input) => !string.IsNullOrEmpty(input);
-    private static bool CheckInputIsINT(this string input, out byte ob)
+    internal static bool CheckInputIsINT(this string input, out byte ob, int start, int end)
     {
         if (byte.TryParse(input, out ob))
-            if (ob <= types.Count && ob > 0)
+            if (ob <= end && ob > start)
                 return true;
             else return false;
         else return false;
+    }
+
+    internal static void CheckInputForTools(int end,out byte output)
+    {
+        do
+        {
+            string? input = Console.ReadLine();
+            if (input.CheckInputIsINT(out byte ob,-1, end))
+            {
+                output = ob;
+                break;
+            }
+            else Console.WriteLine("Please enter a valid value !");
+
+        } while (true);
     }
     #endregion
 }
