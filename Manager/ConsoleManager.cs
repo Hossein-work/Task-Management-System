@@ -173,7 +173,7 @@ static class ConsoleManager
     private enum TaskType
     {
         Normal,
-        Urgent,        
+        Urgent,    
     }
     private static List<Type> types = new List<Type>()
     {
@@ -195,11 +195,10 @@ static class ConsoleManager
     private static bool CheckInputIsINT(this string input, out byte ob)
     {
         if (byte.TryParse(input, out ob))
-            if (ob == 1 || ob == 2)
+            if (ob <= types.Count && ob > 0)
                 return true;
             else return false;
         else return false;
-
     }
     #endregion
 }
