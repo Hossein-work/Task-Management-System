@@ -32,10 +32,10 @@
     {
         get => duedate; private set => duedate = value;
     }
+
     internal Guid GetId() => id;
     private string CheckString(string enter) => string.IsNullOrEmpty(enter) ?
-        throw new AggregateException("Cannot be null or without a value.") : enter;
-
+        throw new ArgumentException("Cannot be null or without a value.") : enter;
     public virtual string GetDetails()
     {
         return description;

@@ -1,10 +1,4 @@
-﻿using System.Diagnostics.Metrics;
-using System.Runtime.ConstrainedExecution;
-using System.Reflection;
-using System.Collections.Specialized;
-using System.Reflection.Metadata;
-
-static class ConsoleManager
+﻿static class ConsoleManager
 {
     private enum TaskType
     {
@@ -44,7 +38,7 @@ static class ConsoleManager
                 return input;
 
             else
-                ShowBug("Please Enter Yes Or No !");
+                ShowError("Please Enter Yes Or No !");
 
         } while (true);
     }
@@ -108,7 +102,7 @@ static class ConsoleManager
         Console.WriteLine();
     }
 
-    public static void ShowBug(string bug)
+    public static void ShowError(string bug)
     {
         Console.BackgroundColor = ConsoleColor.Red;
         Console.Write(bug);
@@ -135,7 +129,7 @@ static class ConsoleManager
             if (CheckInputIsNotEmpty(instance))
                 break;
             else
-                ShowBug("Title cannot be empty.");
+                ShowError("Title cannot be empty.");
         } while (true);
         instance = instance.Truncate();
         return instance;
@@ -150,7 +144,7 @@ static class ConsoleManager
             if (CheckInputIsNotEmpty(instance))
                 break;
             else
-                ShowBug("Description cannot be empty!");
+                ShowError("Description cannot be empty!");
         } while (true);
         return instance;
     }
@@ -167,8 +161,40 @@ static class ConsoleManager
                     return result;
                 }
                 else Console.WriteLine("Please enter a valid value !");
-            else ShowBug("Id cannot be empty!");
+            else ShowError("Id cannot be empty!");
 
+        } while (true);
+    }
+    public static DateTime GetDueTime()
+    {
+        string? t;
+        do
+        {
+            Console.WriteLine("Please enter the Due Time (MM/dd/yyyy H:mm) :");
+            t = Console.ReadLine();
+            if (CheckInputIsNotEmpty(t))
+                if (DateTime.TryParse(t, out DateTime result))
+                {
+                    return result;
+                }
+                else Console.WriteLine("Please enter a valid value !");
+            else ShowError("Due Time cannot be empty!");
+
+        } while (true);
+    }
+    public static byte GetTaskType()
+    {
+        string? type;
+        do
+        {
+            Console.WriteLine("Please enter task type :");
+            ShowType();
+            type = Console.ReadLine();
+            if (CheckInputIsNotEmpty(type))
+                if (type.CheckInputIsINT(out byte ob, 1, types.Count))    
+                    return ob;  
+                else Console.WriteLine("Please enter a valid value !");
+            else ShowError("Type cannot be empty!");
         } while (true);
     }
     #endregion
@@ -177,32 +203,21 @@ static class ConsoleManager
 
     public static void AddCM(out object? task)
     {
-        string? t = GetTitle();
-        string? d = GetDescription();
-        string? ty;
+        string? title = GetTitle();
+        string? descrip = GetDescription();
+        DateTime? duetime = GetDueTime();
+        byte? type = GetTaskType();
+        task = Activator.CreateInstance(types[(int)(type - 1)], title, descrip, duetime);
 
-        do
-        {
-            Console.WriteLine("Please enter task type :");
-            ShowType();
-            ty = Console.ReadLine();
-            if (CheckInputIsNotEmpty(ty))
-                if (ty.CheckInputIsINT(out byte ob, 0, types.Count))
-                {
-                    task = Activator.CreateInstance(types[ob - 1], t, d, DateTime.Now);
-                    break;
-                }
-                else Console.WriteLine("Please enter a valid value !");
-            else ShowBug("Type cannot be empty!");
-        } while (true);
     }
-    public static void EditCM(out Guid id, out string title, out string description)
+    public static void EditCM(out Guid id, out string title, out string description,out DateTime dueTime)
     {
         id = GetId();
 
         Console.WriteLine("To edit a task:");
         title = GetTitle();
         description = GetDescription();
+        dueTime = GetDueTime();
     }
     public static Guid RemoveCM() => GetId();
     #endregion
@@ -212,7 +227,7 @@ static class ConsoleManager
     private static bool CheckInputIsINT(this string input, out byte ob, int start, int end)
     {
         if (byte.TryParse(input, out ob))
-            if (ob <= end && ob > start)
+            if (ob <= end && ob >= start)
                 return true;
             else return false;
         else return false;
@@ -223,7 +238,7 @@ static class ConsoleManager
         do
         {
             string? input = Console.ReadLine();
-            if (input.CheckInputIsINT(out byte ob,-1, end))
+            if (input.CheckInputIsINT(out byte ob,0, end))
             {
                 output = ob;
                 break;

@@ -1,8 +1,8 @@
 ﻿interface IRepository
 {
-    protected void GetAll();
-    protected void GetById(Guid Id);
-    protected void RemoveById(Guid Id);
-    protected void Add<T>(T entity) where T : TaskItem;
-    protected void Edit(Guid Id, string title, string describtion);
+    public void GetAll();
+    public void GetById(Guid Id);
+    public void RemoveById(Guid Id);
+    public void Add(TaskItem entity);
+    public void Edit(Guid Id, string title, string describtion,DateTime dueTime);
 }

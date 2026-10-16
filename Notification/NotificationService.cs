@@ -4,5 +4,5 @@
     {
         Sms, Email
     }
-    public abstract void Sent(string message);
+    public abstract void Send(string message);
 }

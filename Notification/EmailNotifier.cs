@@ -1,9 +1,9 @@
 ﻿class EmailNotifier : NotificationService
 {
-    public override void Sent(string message)
+    public override void Send(string message)
     {
         if (!string.IsNullOrEmpty(message))
-            ConsoleManager.SendNotification(NotificationService.NotifType.Email,message);
+            ConsoleManager.SendNotification(NotifType.Email,message);
         else throw new Exception("Message can not be null of empty !");
     }
 }

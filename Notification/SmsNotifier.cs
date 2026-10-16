@@ -1,9 +1,9 @@
 ﻿class SmsNotifier : NotificationService
 {
-    public override void Sent(string message)
+    public override void Send(string message)
     {
         if (!string.IsNullOrEmpty(message)) 
-            ConsoleManager.SendNotification(NotificationService.NotifType.Sms,message);
+            ConsoleManager.SendNotification(NotifType.Sms,message);
         else throw new Exception("Message can not be null of empty !");
     }
 }

@@ -1,6 +1,4 @@
-﻿using System.ComponentModel;
-
-class InMemoryTaskRepository : IRepository
+﻿class InMemoryTaskRepository : IRepository
 {
     public InMemoryTaskRepository()
     {
@@ -8,37 +6,28 @@ class InMemoryTaskRepository : IRepository
     }
     private List<TaskItem> tasks { get; set; } = new List<TaskItem>();
 
-    public void Add<T>(T entity) where T : TaskItem
+    public void Add(TaskItem entity) 
     {
-        try
-        {
-            tasks.Add(entity);
-            ConsoleManager.ShowSucces("The operation was successful!");
-            ConsoleManager.SendNotification(NotificationService.NotifType.Sms, "A new task was added.");
-        }
-        catch
-        {
-            ConsoleManager.ShowBug("The add operation was unsuccessful! \nPlease Try Again.");
-        }
-
+        tasks.Add(entity);
+        ConsoleManager.ShowSucces("The operation was successful!");
     }
 
-    public void Edit(Guid Id,string title, string describtion)
+    public void Edit(Guid Id, string title, string describtion, DateTime dueTime)
     {
         try
         {
             TaskItem? item;
             if (GetTask(Id, out item))
             {
-                TaskItem instance = new(title, describtion,item.DueDate);
+                TaskItem instance = new(title, describtion, dueTime);
                 item.EditTask(instance);
             }
             else
-                ConsoleManager.ShowBug("Task not founded !");
+                ConsoleManager.ShowError("Task not founded !");
         }
         catch
         {
-            ConsoleManager.ShowBug("The Edit operation was unsuccessful! \nPlease Try Again.");
+            ConsoleManager.ShowError("The Edit operation was unsuccessful! \nPlease Try Again.");
         }
     }
 
@@ -50,7 +39,7 @@ class InMemoryTaskRepository : IRepository
         }
         catch
         {
-            ConsoleManager.ShowBug("The Get All operation was unsuccessful! \nPlease Try Again.");
+            ConsoleManager.ShowError("The Get All operation was unsuccessful! \nPlease Try Again.");
         }
     }
 
@@ -62,33 +51,25 @@ class InMemoryTaskRepository : IRepository
             if (GetTask(Id, out item))
                 ConsoleManager.ShowInfo(item);
             else
-                ConsoleManager.ShowBug("Task not founded !");
+                ConsoleManager.ShowError("Task not founded !");
         }
         catch
         {
-            ConsoleManager.ShowBug("The Get By Id operation was unsuccessful! \nPlease Try Again.");
+            ConsoleManager.ShowError("The Get By Id operation was unsuccessful! \nPlease Try Again.");
         }
     }
 
     public void RemoveById(Guid Id)
     {
-        try
-        {          
-            if (GetTask(Id,out TaskItem? instance))
-            {
-                tasks.Remove(instance);
-
-                ConsoleManager.ShowSucces("The operation was successful!");
-                ConsoleManager.SendNotification(NotificationService.NotifType.Sms, $"A task titled {instance.Title} was deleted.");
-            }
-            else
-            {
-                ConsoleManager.ShowBug("Task not founded !");
-            }
-        }
-        catch
+        if (GetTask(Id, out TaskItem? instance))
         {
-            ConsoleManager.ShowBug("The remove operation was unsuccessful! \nPlease Try Again.");
+            tasks.Remove(instance);
+
+            ConsoleManager.ShowSucces("The operation was successful!");
+        }
+        else
+        {
+            ConsoleManager.ShowError("Task not founded !");
         }
     }
 
