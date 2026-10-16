@@ -104,6 +104,7 @@ static class ConsoleManager
             else
                 ShowBug("Title cannot be empty.");
         } while (true);
+        instance = instance.Truncate();
         return instance;
     }
     private static string GetDescription()
@@ -136,7 +137,7 @@ static class ConsoleManager
             if (CheckInputIsNotEmpty(ty))
                 if (ty.CheckInputIsINT(out byte ob))
                 {
-                    task = Activator.CreateInstance(types[ob], t, d, DateTime.Now);
+                    task = Activator.CreateInstance(types[ob - 1], t, d, DateTime.Now);
                     break;
                 }
                 else Console.WriteLine("Please enter a valid value !");
@@ -171,8 +172,8 @@ static class ConsoleManager
     }
     private enum TaskType
     {
-        Urgent,
-        Normal
+        Normal,
+        Urgent,        
     }
     private static List<Type> types = new List<Type>()
     {
