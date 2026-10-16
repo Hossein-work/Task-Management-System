@@ -2,12 +2,12 @@
 {
     public TaskItem(string title, string description, DateTime dueDate)
     {
-        Id = Guid.NewGuid();
+        id = Guid.NewGuid();
         Title = title;
         Description = description;
         DueDate = dueDate;
     }
-    private readonly Guid Id;
+    private readonly Guid id;
     private string title;
     private string description;
     private DateTime duedate;
@@ -32,7 +32,7 @@
     {
         get => duedate; private set => duedate = value;
     }
-    public Guid GetId() => Id;
+    internal Guid GetId() => id;
     private string CheckString(string enter) => string.IsNullOrEmpty(enter) ?
         throw new AggregateException("Cannot be null or without a value.") : enter;
 
@@ -40,7 +40,7 @@
     {
         return description;
     }
-    public void EditTask(TaskItem input)
+    internal void EditTask(TaskItem input)
     {
         title = input.title;
         description = input.description;

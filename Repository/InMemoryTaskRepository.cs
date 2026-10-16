@@ -4,15 +4,15 @@ class InMemoryTaskRepository : IRepository
 {
     public InMemoryTaskRepository()
     {
-        Tasks.Add(new TaskItem("title1", "des4", DateTime.Now));
+        tasks.Add(new TaskItem("title", "description", DateTime.Now));
     }
-    private List<TaskItem> Tasks { get; set; } = new List<TaskItem>();
+    private List<TaskItem> tasks { get; set; } = new List<TaskItem>();
 
     public void Add<T>(T entity) where T : TaskItem
     {
         try
         {
-            Tasks.Add(entity);
+            tasks.Add(entity);
             ConsoleManager.ShowSucces("The operation was successful!");
             ConsoleManager.SendNotification(NotificationService.NotifType.Sms, "A new task was added.");
         }
@@ -46,7 +46,7 @@ class InMemoryTaskRepository : IRepository
     {
         try
         {
-            ConsoleManager.ShowGetAll(Tasks);
+            ConsoleManager.ShowGetAll(tasks);
         }
         catch
         {
@@ -70,20 +70,13 @@ class InMemoryTaskRepository : IRepository
         }
     }
 
-    private bool GetTask(Guid Id, out TaskItem? input)
-    {
-        TaskItem? instance = Tasks.Find(x => x.GetId() == Id);
-        input = instance != null ? instance : null;
-        return instance != null;
-    }
-
     public void RemoveById(Guid Id)
     {
         try
         {          
             if (GetTask(Id,out TaskItem? instance))
             {
-                Tasks.Remove(instance);
+                tasks.Remove(instance);
 
                 ConsoleManager.ShowSucces("The operation was successful!");
                 ConsoleManager.SendNotification(NotificationService.NotifType.Sms, $"A task titled {instance.Title} was deleted.");
@@ -97,5 +90,13 @@ class InMemoryTaskRepository : IRepository
         {
             ConsoleManager.ShowBug("The remove operation was unsuccessful! \nPlease Try Again.");
         }
+    }
+
+
+    private bool GetTask(Guid Id, out TaskItem? input)
+    {
+        TaskItem? instance = tasks.Find(x => x.GetId() == Id);
+        input = instance != null ? instance : null;
+        return instance != null;
     }
 }

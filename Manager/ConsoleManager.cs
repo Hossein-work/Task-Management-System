@@ -6,7 +6,19 @@ using System.Reflection.Metadata;
 
 static class ConsoleManager
 {
-    public static void Welcome(string welcome, char signType, byte countSign)
+    private enum TaskType
+    {
+        Normal,
+        Urgent,
+    }
+    private static List<Type> types = new List<Type>()
+    {
+           typeof(TaskItem) ,
+          typeof(UrgentTask) ,
+    };
+
+    #region Start&End
+    internal static void Welcome(string welcome, char signType, byte countSign)
     {
         for (int i = 0; i < countSign; i++)
             Console.Write(signType);
@@ -17,7 +29,7 @@ static class ConsoleManager
             Console.Write(signType);
         Console.WriteLine();
     }
-    public static bool CheckEndProgram(string endMessage)
+    internal static bool CheckEndProgram(string endMessage)
     {
         Console.WriteLine(endMessage);
         string input = CheckYesOrNo();
@@ -36,6 +48,9 @@ static class ConsoleManager
 
         } while (true);
     }
+    #endregion
+
+    #region Showing
     public static void ShowToolsList(List<string> list)
     {
         Console.WriteLine("Please select an item:");
@@ -72,7 +87,19 @@ static class ConsoleManager
         }
         Console.WriteLine($"Description : {list.GetDetails()}");
     }
+    private static void ShowType()
+    {
+        byte count = 1;
+        foreach (TaskType value in Enum.GetValues(typeof(TaskType)))
+        {
+            Console.Write(count + ".");
+            count++;
+            Console.WriteLine(value);
+        }
+    }
+    #endregion
 
+    #region Notifications
     public static void SendNotification(NotificationService.NotifType type, string message)
     {
         Console.WriteLine(type.ToString() + ':' + message);
@@ -84,16 +111,21 @@ static class ConsoleManager
     public static void ShowBug(string bug)
     {
         Console.BackgroundColor = ConsoleColor.Red;
-        Console.WriteLine(bug);
+        Console.Write(bug);
         Console.ResetColor();
+        Console.WriteLine();
     }
     public static void ShowSucces(string succes)
     {
         Console.BackgroundColor = ConsoleColor.Green;
-        Console.WriteLine("---" + succes + "---");
+        Console.Write("---" + succes + "---");
         Console.ResetColor();
+        Console.WriteLine();
     }
-    private static string GetTitle()
+    #endregion
+
+    #region GetingInput
+    public static string GetTitle()
     {
         string? instance;
         do
@@ -108,7 +140,7 @@ static class ConsoleManager
         instance = instance.Truncate();
         return instance;
     }
-    private static string GetDescription()
+    public static string GetDescription()
     {
         string? instance;
         do
@@ -122,7 +154,26 @@ static class ConsoleManager
         } while (true);
         return instance;
     }
-    #region Add
+    public static Guid GetId()
+    {
+        string? i;
+        do
+        {
+            Console.WriteLine("Please enter the ID (00000000-0000-0000-0000-000000000000) :");
+            i = Console.ReadLine();
+            if (CheckInputIsNotEmpty(i))
+                if (Guid.TryParse(i, out Guid result))
+                {
+                    return result;
+                }
+                else Console.WriteLine("Please enter a valid value !");
+            else ShowBug("Id cannot be empty!");
+
+        } while (true);
+    }
+    #endregion
+
+    #region CM
 
     public static void AddCM(out object? task)
     {
@@ -145,7 +196,7 @@ static class ConsoleManager
             else ShowBug("Type cannot be empty!");
         } while (true);
     }
-    public static void EditMC(out Guid id, out string title, out string description)
+    public static void EditCM(out Guid id, out string title, out string description)
     {
         id = GetId();
 
@@ -153,47 +204,12 @@ static class ConsoleManager
         title = GetTitle();
         description = GetDescription();
     }
-    public static Guid RemoveMC() => GetId();
-    private static Guid GetId()
-    {
-        string? i;
-        do
-        {
-            Console.WriteLine("Please enter the ID (00000000-0000-0000-0000-000000000000) :");
-            i = Console.ReadLine();
-            if (CheckInputIsNotEmpty(i))
-                if (Guid.TryParse(i, out Guid result))
-                {
-                    return result;
-                }
-                else Console.WriteLine("Please enter a valid value !");
-            else ShowBug("Id cannot be empty!");
+    public static Guid RemoveCM() => GetId();
+    #endregion
 
-        } while (true);
-    }
-    private enum TaskType
-    {
-        Normal,
-        Urgent,
-    }
-    private static List<Type> types = new List<Type>()
-    {
-           typeof(TaskItem) ,
-          typeof(UrgentTask) ,
-    };
-
-    private static void ShowType()
-    {
-        byte count = 1;
-        foreach (TaskType value in Enum.GetValues(typeof(TaskType)))
-        {
-            Console.Write(count + ".");
-            count++;
-            Console.WriteLine(value);
-        }
-    }
+    #region Checking
     private static bool CheckInputIsNotEmpty(string input) => !string.IsNullOrEmpty(input);
-    internal static bool CheckInputIsINT(this string input, out byte ob, int start, int end)
+    private static bool CheckInputIsINT(this string input, out byte ob, int start, int end)
     {
         if (byte.TryParse(input, out ob))
             if (ob <= end && ob > start)
@@ -215,6 +231,6 @@ static class ConsoleManager
             else Console.WriteLine("Please enter a valid value !");
 
         } while (true);
-    }
+    }//used in Program class
     #endregion
 }

@@ -4,23 +4,26 @@ using System.Runtime.InteropServices;
 
 class TaskManager
 {
-    private const string EndMessage = "Are you continuing? (Yes or No)";
-    private const string Welcome = "Welcome to my project!";
-    private static readonly List<string> Tools = new() {"Exit","Get all task", "Remove task", "Edit task", "Add task" };
+    private const string endMessage = "Are you continuing? (Yes or No)";
+    private const string welcome = "Welcome to my project!";
+    private static readonly List<string> tools = new() 
+    {
+        "Exit","Get all task", "Remove task", "Edit task", "Add task" 
+    };
     private static InMemoryTaskRepository repository = new InMemoryTaskRepository();
     public static void Main(string[] args)
     {
-        ConsoleManager.Welcome(Welcome, '-', 20);
+        ConsoleManager.Welcome(welcome, '-', 20);
         do
         {
-            ConsoleManager.ShowToolsList(Tools);
+            ConsoleManager.ShowToolsList(tools);
             ToolsManager();
-        } while (ConsoleManager.CheckEndProgram(EndMessage));
+        } while (ConsoleManager.CheckEndProgram(endMessage));
 
     }
     private static void ToolsManager()
     {
-        ConsoleManager.CheckInputForTools(Tools.Count -1,out byte output);
+        ConsoleManager.CheckInputForTools(tools.Count -1,out byte output);
         switch (output)
         {
             case 0:
@@ -42,7 +45,7 @@ class TaskManager
     }
     private static void RemoveManager(InMemoryTaskRepository instanceRepository)
     {
-        Guid id = ConsoleManager.RemoveMC();
+        Guid id = ConsoleManager.RemoveCM();
         instanceRepository.RemoveById(id);
     }
     private static void AddManager(InMemoryTaskRepository instanceRepository)
@@ -54,7 +57,7 @@ class TaskManager
     }
     private static void EditManager(InMemoryTaskRepository instanceRepository)
     {
-        ConsoleManager.EditMC(out Guid id, out string title, out string description);
+        ConsoleManager.EditCM(out Guid id, out string title, out string description);
         instanceRepository.Edit(id, title, description);
     }
 
