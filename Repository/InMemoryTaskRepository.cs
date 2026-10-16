@@ -2,13 +2,11 @@
 
 class InMemoryTaskRepository : IRepository
 {
-    private readonly List<TaskItem> Tasks = new()
+    public InMemoryTaskRepository()
     {
-        new TaskItem ("title1","des4",DateTime.Now),
-        new TaskItem ("title2","des3",DateTime.Now),
-        new TaskItem ("title3","des2",DateTime.Now),
-        new TaskItem ("title4","des1",DateTime.Now),
-    };
+        Tasks.Add(new TaskItem("title1", "des4", DateTime.Now));
+    }
+    private List<TaskItem> Tasks { get; set; } = new List<TaskItem>();
 
     public void Add<T>(T entity) where T : TaskItem
     {
